@@ -6,6 +6,7 @@ class Program
         bool repeatMain = true;
         UserAccount? currentUser;
 
+        // Deklaration av lista med användarkonton
         List<UserAccount> userAccountList = new List<UserAccount>();
 
         // Hårdkodad användare #1
@@ -82,8 +83,8 @@ class Program
                                     Console.Write("\nTryck enter för att komma till användarmenyn.");
                                     Console.ReadLine();
                                     break;
-                                        
-                                case 2:                                   
+
+                                case 2:
                                     TransferMoney(currentUser);
                                     break;
 
@@ -146,7 +147,7 @@ class Program
             option = Console.ReadLine();
 
             success = int.TryParse(option, out result);
-            
+
             if (success)
             {
                 if (result == 1 || result == 2 || result == 3)
@@ -170,7 +171,7 @@ class Program
 
         return result;
     }
-    
+
     static int PrintUserMenu()
     {
         bool success;
@@ -247,7 +248,7 @@ class Program
 
     static UserAccount? LogIn(List<UserAccount> userAccountList)
     {
-        int attempts = 5;
+        int attempts = 3;
 
         Console.Clear();
 
@@ -298,8 +299,7 @@ class Program
                 iterations++;
                 Console.WriteLine(iterations + ". {0}", payroll.Accountname);
             }
-
-            Console.WriteLine("\nVänligen ange ett alternativ: ");
+            Console.WriteLine("\nVänligen ange ett konto: ");
             Console.Write("--->");
             option = Console.ReadLine();
 
@@ -320,13 +320,21 @@ class Program
                         Console.Clear();
                         foreach (SavingsAccount savingsAccount in currentUser.SavingsAccounts)
                         {
-                            savingsAccount.Balance -= result;
-                            Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
-                        }
-                        foreach (PayrollAccount payrollAccount in currentUser.PayrollAccounts)
-                        {
-                            payrollAccount.Balance += result;
-                            Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", payrollAccount.Accountname, payrollAccount.Balance);
+                            if (savingsAccount.Balance >= result)
+                            {
+                                savingsAccount.Balance -= result;
+                                Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
+
+                                foreach (PayrollAccount payrollAccount in currentUser.PayrollAccounts)
+                                {
+                                    payrollAccount.Balance += result;
+                                    Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", payrollAccount.Accountname, payrollAccount.Balance);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Du har inte tillräckligt mycket pengar på kontot för att genomföra detta ärende.");
+                            }
                         }
                         Console.Write("\nTryck enter för att komma till användarmenyn.");
                         Console.ReadLine();
@@ -340,7 +348,87 @@ class Program
                     break;
 
                 case 2:
+                    Console.Clear();
                     Console.WriteLine("Ange belopp att överföra till sparkonto.");
+                    Console.Write("---> ");
+                    amount = Console.ReadLine();
+
+                    success = float.TryParse(amount, out result);
+
+                    if (success)
+                    {
+                        Console.Clear();
+                        foreach (PayrollAccount payrollAccount in currentUser.PayrollAccounts)
+                        {
+                            if (payrollAccount.Balance >= result)
+                            {
+                                payrollAccount.Balance -= result;
+                                Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", payrollAccount.Accountname, payrollAccount.Balance);
+                                foreach (SavingsAccount savingsAccount in currentUser.SavingsAccounts)
+                                {
+                                    savingsAccount.Balance += result;
+                                    Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Du har inte tillräckligt mycket pengar på kontot för att genomföra detta ärende.");
+                            }
+                        }
+                        Console.Write("\nTryck enter för att komma till användarmenyn.");
+                        Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Vänligen ange ett giltigt belopp.");
+                        Console.Write("\nTryck enter för att försöka igen.");
+                        Console.ReadLine();
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("Vänligen ange ett alternativ mellan 1-3.");
+                    break;
+            }
+
+        } while (!success);
+    }
+
+    static void WithdrawMoney(UserAccount currentUser)
+    {
+        bool success;
+        string option, amount;
+
+        do
+        {
+            int iterations = 0;
+
+            Console.Clear();
+            Console.WriteLine("Lista med konton för att hantera uttag.");
+
+            foreach (SavingsAccount saving in currentUser.SavingsAccounts)
+            {
+                iterations++;
+                Console.WriteLine(iterations + ". {0}", saving.Accountname);
+            }
+
+            foreach (PayrollAccount payroll in currentUser.PayrollAccounts)
+            {
+                iterations++;
+                Console.WriteLine(iterations + ". {0}", payroll.Accountname);
+            }
+
+            Console.WriteLine("\nVänligen ange ett konto: ");
+            Console.Write("--->");
+            option = Console.ReadLine();
+
+            success = float.TryParse(option, out float result);
+
+            switch (result)
+            {
+                case 1:
+                    Console.Clear();
+                    Console.WriteLine("Ange belopp för uttag från sparkonto.");
                     Console.Write("---> ");
                     amount = Console.ReadLine();
 
@@ -351,9 +439,31 @@ class Program
                         Console.Clear();
                         foreach (SavingsAccount savingsAccount in currentUser.SavingsAccounts)
                         {
-                            savingsAccount.Balance += result;
+                            savingsAccount.Balance -= result;
                             Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
                         }
+                        Console.Write("\nTryck enter för att komma till användarmenyn.");
+                        Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Vänligen ange ett giltigt belopp.");
+                        Console.Write("\nTryck enter för att gå tillbaka.");
+                        Console.ReadLine();
+                    }
+                    break;
+
+                case 2:
+                    Console.Clear();
+                    Console.WriteLine("Ange belopp för uttag från sparkonto.");
+                    Console.Write("---> ");
+                    amount = Console.ReadLine();
+
+                    success = float.TryParse(amount, out result);
+
+                    if (success)
+                    {
+                        Console.Clear();
                         foreach (PayrollAccount payrollAccount in currentUser.PayrollAccounts)
                         {
                             payrollAccount.Balance -= result;
@@ -361,34 +471,24 @@ class Program
                         }
                         Console.Write("\nTryck enter för att komma till användarmenyn.");
                         Console.ReadLine();
-                        success = false;
                     }
                     else
                     {
                         Console.WriteLine("Vänligen ange ett giltigt belopp.");
-                        Console.Write("\nTryck enter för att försöka igen.");
+                        Console.Write("\nTryck enter för att gå tillbaka.");
                         Console.ReadLine();
                     }
                     break;
 
-                case 3:
-                    success = false;
-                    break;
-
                 default:
-                    Console.WriteLine("Vänligen ange ett alternativ mellan 1-3.");
-                    break;                     
+
+                    break;
             }
 
         } while (!success);
     }
-
-    static void WithdrawMoney(UserAccount currentUser)
-    {
-
-    }
 }
- 
+
 class UserAccount
 {
     private string _userName;
