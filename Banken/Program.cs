@@ -72,12 +72,12 @@ class Program
 
                                     foreach (SavingsAccount saving in currentUser.SavingsAccounts)
                                     {
-                                        Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", saving.Accountname, saving.Balance);
+                                        Console.WriteLine("{0}\nTotal saldo: {1}\n", saving.Accountname, saving.Balance);
                                     }
 
                                     foreach (PayrollAccount payroll in currentUser.PayrollAccounts)
                                     {
-                                        Console.WriteLine("Konto: {0}\nTotal saldo: {1}", payroll.Accountname, payroll.Balance);
+                                        Console.WriteLine("{0}\nTotal saldo: {1}", payroll.Accountname, payroll.Balance);
                                     }
 
                                     Console.Write("\nTryck enter för att komma till användarmenyn.");
@@ -320,15 +320,15 @@ class Program
                         Console.Clear();
                         foreach (SavingsAccount savingsAccount in currentUser.SavingsAccounts)
                         {
-                            if (savingsAccount.Balance >= result)
+                            if (savingsAccount.Balance >= result && result >= 0)
                             {
                                 savingsAccount.Balance -= result;
-                                Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
+                                Console.WriteLine("{0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
 
                                 foreach (PayrollAccount payrollAccount in currentUser.PayrollAccounts)
                                 {
                                     payrollAccount.Balance += result;
-                                    Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", payrollAccount.Accountname, payrollAccount.Balance);
+                                    Console.WriteLine("{0}\nTotal saldo: {1}\n", payrollAccount.Accountname, payrollAccount.Balance);
                                 }
                             }
                             else
@@ -360,14 +360,14 @@ class Program
                         Console.Clear();
                         foreach (PayrollAccount payrollAccount in currentUser.PayrollAccounts)
                         {
-                            if (payrollAccount.Balance >= result)
+                            if (payrollAccount.Balance >= result && result >= 0)
                             {
                                 payrollAccount.Balance -= result;
-                                Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", payrollAccount.Accountname, payrollAccount.Balance);
+                                Console.WriteLine("{0}\nTotal saldo: {1}\n", payrollAccount.Accountname, payrollAccount.Balance);
                                 foreach (SavingsAccount savingsAccount in currentUser.SavingsAccounts)
                                 {
                                     savingsAccount.Balance += result;
-                                    Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
+                                    Console.WriteLine("{0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
                                 }
                             }
                             else
@@ -439,8 +439,15 @@ class Program
                         Console.Clear();
                         foreach (SavingsAccount savingsAccount in currentUser.SavingsAccounts)
                         {
-                            savingsAccount.Balance -= result;
-                            Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
+                            if (savingsAccount.Balance >= result && result >= 0)
+                            {
+                                savingsAccount.Balance -= result;
+                                Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", savingsAccount.Accountname, savingsAccount.Balance);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Du har inte tillräckligt mycket pengar på kontot för att genomföra detta ärende.");
+                            }
                         }
                         Console.Write("\nTryck enter för att komma till användarmenyn.");
                         Console.ReadLine();
@@ -466,8 +473,15 @@ class Program
                         Console.Clear();
                         foreach (PayrollAccount payrollAccount in currentUser.PayrollAccounts)
                         {
-                            payrollAccount.Balance -= result;
-                            Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", payrollAccount.Accountname, payrollAccount.Balance);
+                            if (payrollAccount.Balance >= result && result >= 0)
+                            {
+                                payrollAccount.Balance -= result;
+                                Console.WriteLine("Konto: {0}\nTotal saldo: {1}\n", payrollAccount.Accountname, payrollAccount.Balance);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Du har inte tillräckligt mycket pengar på kontot för att genomföra detta ärende.");
+                            }
                         }
                         Console.Write("\nTryck enter för att komma till användarmenyn.");
                         Console.ReadLine();
