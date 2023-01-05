@@ -113,9 +113,10 @@ class Program
 
         // Inhämtning av användarnamn & lösenord från textfil
         string input = "";
+
         try
         {
-            input = File.ReadAllText(@"C:\Users\Steven\OneDrive\Dokument\Utbildning\Chas Academy\Programmering i C# (v46 2022 - v8 2023)\source\repos\Chas Academy\Banken-v2\useraccounts.txt");
+            input = File.ReadAllText(@"C:\Users\Steven\OneDrive\Dokument\Utbildning\Chas Academy\Programmering i C# (v46 2022 - v8 2023)\source\repos\Chas Academy\Banken\useraccounts.txt");
         }
         catch
         {
@@ -322,6 +323,7 @@ class Program
     {
         bool repeat = true;
         string username, password;
+        string user = "";
 
         do
         {
@@ -340,6 +342,7 @@ class Program
             }
             else
             {
+                user = username + ":" + password;
                 Console.WriteLine("\nEn ny användare har skapats!");
                 Console.Write("Tryck enter för att komma till huvudmenyn.");
                 Console.ReadLine();
@@ -347,8 +350,6 @@ class Program
             }
         }
         while (repeat == true);
-
-        string user = username + ":" + password;
 
         return user;
     }
@@ -509,6 +510,7 @@ class Program
     static void WithdrawMoney(UserAccount currentUser)
     {
         int iterations = 0;
+        int attempts = 3;
         int result;
         double withdrawAmount;
         string option, option2;
@@ -543,11 +545,29 @@ class Program
                 if (success2 && withdrawAmount > 0 && withdrawAmount <= accountOut.Balance)
                 {
                     Console.Clear();
-                    accountOut.Balance -= withdrawAmount;
-
-                    foreach (MoneyAccount moneyAccount in currentUser.MoneyAccounts)
+                    while (attempts > 0)
                     {
-                        Console.WriteLine("{0} | Total saldo: {1} ", moneyAccount.Accountname, moneyAccount.Balance + "\n");
+                        Console.WriteLine("Vänligen ange ditt lösenord för att bekräfta ditt uttag.\n");
+                        Console.Write("Lösenord: ");
+                        string password = Console.ReadLine();
+
+                        Console.Clear();
+
+                        if (password == currentUser.Password)
+                        {
+                            accountOut.Balance -= withdrawAmount;
+                            foreach (MoneyAccount moneyAccount in currentUser.MoneyAccounts)
+                            {
+                                Console.WriteLine("{0} | Total saldo: {1} ", moneyAccount.Accountname, moneyAccount.Balance + "\n");
+                            }
+                            attempts = 0;
+                        }
+                        else
+                        {
+                            --attempts;
+                            Console.WriteLine("Du har angett fel lösenord. Vänligen försök igen.");
+                            Console.WriteLine(">" + attempts + "< försök kvar.");
+                        }
                     }
                 }
                 else
