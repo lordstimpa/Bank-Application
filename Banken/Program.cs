@@ -85,8 +85,9 @@ class Program
                     else
                     {
                         Console.WriteLine("Du har inga försök kvar.");
-                        Console.Write("\nTryck enter för att komma till huvudmenyn.");
+                        Console.Write("\nTryck enter för att stänga ner programmet.");
                         Console.ReadLine();
+                        repeatMain = false;
                     }
                     break;
 
