@@ -26,6 +26,20 @@ Metoderna som finns i programmet är:
 ImportUsers, PrintStartMenu, PrintUserMenu, ParseRow, AddUser, CreateAccount, LogIn, ChangePassword, TransferMoney och WithdrawMoney.
 Vad varje metod gör har kommenterats i koden.
 
+## Reflektioner
+Äldre versioner av Banken bestod av användare som hårdkodats i programmet. Det vill säga med användarnamn och lösenord.
+Detta gjorde det mycket enklare för mig som utvecklare att konstruera hela programmet. Däremot lärde jag mig inte mycket av det.
+Därefter använde jag mig av min lärares metod vilket utgick från att hämta in data från ett text dokument vilket utökade stegen i hantering av datan avsevärt mycket.
+Denna data bestod av användarnamn och lösenord men kan uttökas med mer information vilket leder till mer anpassning i stegen av hanteringen.
+
+Tidigare så använde jag mig utav lists istället för arrays för att förvara data inom. Lists är ett mycket bättre alternativ vid hantering av dynamisk data.
+Det vill säga, ifall det finns data som ska tas bort, ändras eller uttökas så kan detta göras relativt enkelt med mindre mängd kod.
+Innan man slänger sig inpå användningen av Lists så bör man ha bra kunskaper av arrays innan man tar den enkla rutten.
+Med denna synpunkt så använde jag mig utav bägge alternativen. Arrays för att lagra datan med användarkonton och Lists för att förvara data om pengarkonton.
+
+Något som kan förbättras i programmet är att implementera en relativ sökväg till textfilen som har all data som importeras.
+Detta resulterar i att andra enheter som kör programmet kan hämta in datan utan att behöva anpassa sökvägen.
+
 ## Övrigt
 För att importera hårdkodade användare så behöver man justera filsökningsvägen till den som finns på din specifika dator.
 

@@ -1,12 +1,13 @@
-﻿namespace Banken;
+﻿using System;
+using System.Runtime.CompilerServices;
+
+namespace Banken;
 class Program
 {
     static void Main(string[] args)
     {
         bool repeatMain = true;
 
-        // Metod för att skapa klass-användare från textdokument
-        // Samt öppna olika antal konton att förvara pengar inom till vardera inhämtad användare
         UserAccount[] userAccounts = ImportUsers();
 
         // do-while STARTMENY
@@ -107,17 +108,20 @@ class Program
             }
         } while (repeatMain);
     }
+
+    // Metod för att hämta användaruppgifter från ett textdokument.
+    // Samt öppna olika antal konton och pengarkonton för vardera användare.
     static UserAccount[] ImportUsers()
     {
         // Deklaration av array med användarkonton
         UserAccount[] userAccounts = new UserAccount[0];
 
-        // Inhämtning av användarnamn & lösenord från textfil
-        string input = "";
+        // Deklaration av variabel för inhämtad data från textfil
+        string Input = "";
 
         try
         {
-            input = File.ReadAllText(@"C:\Users\Steven\OneDrive\Dokument\Utbildning\Chas Academy\Programmering i C# (v46 2022 - v8 2023)\source\repos\Chas Academy\Banken\useraccounts.txt");
+            Input = File.ReadAllText(@"C:\Users\steve\OneDrive\Dokument\Utbildning\Chas Academy\Programmering i C# (v46 2022 - v8 2023)\source\repos\Chas Academy\Banken\useraccounts.txt");
         }
         catch
         {
@@ -125,7 +129,7 @@ class Program
         }
 
         // Skapar instanser av "class UserAccount" och lagrar dem i array
-        var rows = input.Split('\n');
+        var rows = Input.Split('\n');
         foreach (var row in rows)
         {
             userAccounts = AddUser(userAccounts, ParseRow(row));
@@ -194,6 +198,7 @@ class Program
         return userAccounts;
     }
 
+    // Metod för att visa inloggningsmeny/startmeny
     static int PrintStartMenu()
     {
         bool success;
@@ -239,6 +244,7 @@ class Program
         return result;
     }
 
+    // Metod för att visa användarmenyn
     static int PrintUserMenu()
     {
         bool success;
@@ -285,6 +291,8 @@ class Program
         return result;
     }
 
+    // Metod för att separera på användaruppgifterna som hämtats.
+    // Därefter returnerna en/flera användare. 
     static UserAccount ParseRow(string userRow)
     {
         var cols = userRow.Split(':');
@@ -306,6 +314,7 @@ class Program
         return newUser;
     }
 
+    // Metod för att returnerna en array med alla användare.
     static UserAccount[] AddUser(UserAccount[] oldUsers, UserAccount userToAdd)
     {
         int numberOfUsers = oldUsers.Length;
@@ -320,6 +329,7 @@ class Program
         return newUsers;
     }
 
+    // Metod för att skapa ett nytt användarkonto
     static string CreateAccount()
     {
         bool repeat = true;
@@ -355,6 +365,7 @@ class Program
         return user;
     }
 
+    // Metod för att logga in på ett användarkonto
     static UserAccount? LogIn(UserAccount[] userAccounts)
     {
         int attempts = 3;
@@ -384,6 +395,7 @@ class Program
         return null;
     }
 
+    // Metod för att ändra lösenord på inloggat användarkonto
     static void ChangePassword(UserAccount currentUser)
     {
         bool repeat = true;
@@ -415,6 +427,7 @@ class Program
         } while (repeat);
     }
 
+    // Metod för att överföra pengar mellan användarens pengarkonton
     static void TransferMoney(UserAccount currentUser)
     {
         int iterations = 0;
@@ -508,6 +521,7 @@ class Program
         Console.ReadLine();
     }
 
+    // Metod för att ta ut pengar från ett pengarkonto
     static void WithdrawMoney(UserAccount currentUser)
     {
         int iterations = 0;
@@ -592,6 +606,7 @@ class Program
     }
 }
 
+// Klass för användarkonto
 class UserAccount
 {
     private string _userName;
@@ -620,6 +635,7 @@ class UserAccount
     }
 }
 
+// Klass för pengarkonto
 class MoneyAccount
 {
     private string _accountName = "Privatkonto";
